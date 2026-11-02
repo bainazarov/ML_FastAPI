@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+.pytest_cache/
+
+reports/
+charts/
+audit/*.json
+
+data/*
+!data/.gitkeep
+
+.idea/
+.vscode/
