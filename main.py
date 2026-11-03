@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 
+from routers import dataset
 from schemas import FeatureVectorChurn
 
 app = FastAPI()
+
+app.include_router(dataset.router)
 
 
 @app.get("/")
