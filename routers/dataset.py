@@ -1,6 +1,12 @@
 from fastapi import APIRouter, Query
 
 from services.dataset import load_dataset, to_dataset_rows
+from services.preprocessing import (
+    CATEGORICAL_FEATURES,
+    NUMERIC_FEATURES,
+    churn_distribution,
+    prepare_train_test,
+)
 from schemas import DatasetRowChurn
 
 router = APIRouter(prefix="/dataset", tags=["dataset"])
@@ -24,4 +30,21 @@ def info() -> dict:
             str(target_class): int(count)
             for target_class, count in churn_counts.items()
         },
+    }
+
+
+@router.get("/split-info")
+def split_info() -> dict:
+    X_train, X_test, y_train, y_test = prepare_train_test()
+    return {
+        "train": {
+            "rows": len(X_train),
+            "churn_distribution": churn_distribution(y_train),
+        },
+        "test": {
+            "rows": len(X_test),
+            "churn_distribution": churn_distribution(y_test),
+        },
+        "numeric_features": NUMERIC_FEATURES,
+        "categorical_features": CATEGORICAL_FEATURES,
     }
